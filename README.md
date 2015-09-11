@@ -42,14 +42,14 @@ A value descriptor is a string which can describe three types of values:
  3. A value in memory, which takes the form "[base address, number of bytes to read]"  
          where number of bytes to read is 1, 2 or 4  
 	 e.g. [0,2] evaluates to the 16 bit integer stored in the first 2 bytes of memory  
-	      [0x33,4] evalutes to the 32 bit integer starting at address 0x33  
+	      [0x33,4] evaluates to the 32 bit integer starting at address 0x33  
           and [4,0x1] evaluates to the byte located at address 4  
 
 A relational operator is one of the following: \<, \>, =, \>=, \<=, != (notice we use = and not ==).
 
 Here are some examples of conditional breakpoints and watch condition commands:
  - bp 0x1a if %edx\>0
- - bp 22 if 9=9 (Equivilant to an unconditional breakpoint at address 22)
+ - bp 22 if 9=9 (Equivalent to an unconditional breakpoint at address 22)
  - bp 28 if [23,1]=0xff
  - watch %ecx!=[80,4]
  - watch $0x3a=$0x3a (Has the effect of returning to the debugger prior to executing every instruction)

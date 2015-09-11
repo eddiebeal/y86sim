@@ -31,36 +31,35 @@ Debugger commands:
  * makeyis \<file name\> -- Generates a yis compatible .yo file
  * exit -- Exits the simulator
 
-\<addr\> is an address and may be in decimal (e.g. 53) or hexadecimal (e.g. 0x35)
-\<func name\> is the name of a function (i.e. the name of it's label)
-\<file name\> is the name of a file to save to/read from
-\<cond expr\> is a conditional expression and takes the format: \<value descriptor\>\<relational operator\>\<value descriptor\>.
+\<addr\> is an address and may be in decimal (e.g. 53) or hexadecimal (e.g. 0x35)  
+\<func name\> is the name of a function (i.e. the name of it's label)  
+\<file name\> is the name of a file to save to/read from  
+\<cond expr\> is a conditional expression and takes the format: \<value descriptor\>\<relational operator\>\<value descriptor\>.  
 
 A value descriptor is a string which can describe three types of values:
  1. A constant value, which is optionally preceded by $ (e.g. 237 or 0xdeadc0de or $237 or $0xa3)
  2. A register value, which must be preceded by % (e.g. %edx or %ebx)
- 3. A value in memory, which takes the form "[base address, number of bytes to read]"
-         where number of bytes to read is 1, 2 or 4
-	 e.g. [0,2] evaluates to the 16 bit integer stored in the first 2 bytes of memory
-	      [0x33,4] evalutes to the 32 bit integer starting at address 0x33
-          and [4,0x1] evaluates to the byte located at address 4
+ 3. A value in memory, which takes the form "[base address, number of bytes to read]"  
+         where number of bytes to read is 1, 2 or 4  
+	 e.g. [0,2] evaluates to the 16 bit integer stored in the first 2 bytes of memory  
+	      [0x33,4] evalutes to the 32 bit integer starting at address 0x33  
+          and [4,0x1] evaluates to the byte located at address 4  
 
 A relational operator is one of the following: \<, \>, =, \>=, \<=, != (notice we use = and not ==).
 
 Here are some examples of conditional breakpoints and watch condition commands:
- bp 0x1a if %edx\>0
- bp 22 if 9=9 (Equivilant to an unconditional breakpoint at address 22)
- bp 28 if [23,1]=0xff
+ - bp 0x1a if %edx\>0
+ - bp 22 if 9=9 (Equivilant to an unconditional breakpoint at address 22)
+ - bp 28 if [23,1]=0xff
+ - watch %ecx!=[80,4]
+ - watch $0x3a=$0x3a (Has the effect of returning to the debugger prior to executing every instruction)
+ - watch %esp=%ebp
 
- watch %ecx!=[80,4]
- watch $0x3a=$0x3a (Has the effect of returning to the debugger prior to executing every instruction)
- watch %esp=%ebp
-
-WARNING: y86sim does not support labels appearing on the same line as an instruction or directive. This is inconsistent with yas/yis, which allows source lines such as "myFunc: pushl %ebp" or "myData: .long 3". To overcome this limitation, simply place all labels on their own line, for example:
-myFunc:
-  pushl %ebp
+WARNING: y86sim does not support labels appearing on the same line as an instruction or directive. This is inconsistent with yas/yis, which allows source lines such as "myFunc: pushl %ebp" or "myData: .long 3". To overcome this limitation, simply place all labels on their own line, for example:  
+myFunc:  
+  pushl %ebp  
 
 and
 
-myData:
-  .long 3
+myData:  
+  .long 3  

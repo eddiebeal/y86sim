@@ -546,7 +546,7 @@ static void switch_to_debugger(char *title, ...) {
 				write_to_dbg("bp <addr> if <cond expression>");
 				write_to_dbg("bp <func name> if <cond expr>");
 				
-				write_to_dbg("pause <file name>, restore <file name>, write <file name>");
+				write_to_dbg("pause <file name>, restore <file name>, makeyis <file name>");
 			} else {
 				if (strcmp(args[0], "r") == 0 || strcmp(args[0], "run") == 0) {
 					write_to_dbg("run - resumes execution of the program", args[0]);

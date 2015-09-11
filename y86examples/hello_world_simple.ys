@@ -1,0 +1,26 @@
+irmovl $0x48, %ecx
+wrch %ecx
+irmovl $0x65, %ecx
+wrch %ecx
+irmovl $0x6c, %ecx
+wrch %ecx
+irmovl $0x6c, %ecx
+wrch %ecx
+irmovl $0x6f, %ecx
+wrch %ecx
+irmovl $0x20, %ecx
+wrch %ecx
+irmovl $0x57, %ecx
+wrch %ecx
+irmovl $0x6f, %ecx
+wrch %ecx
+irmovl $0x72, %ecx
+wrch %ecx
+irmovl $0x6c, %ecx
+wrch %ecx
+irmovl $0x64, %ecx
+wrch %ecx
+irmovl $0x21, %ecx
+wrch %ecx
+
+halt

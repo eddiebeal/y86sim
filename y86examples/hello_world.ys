@@ -1,0 +1,52 @@
+irmovl $0x1000, %esp  # init stack ptr
+
+# print "Hello World!"
+irmovl hello_world_str, %edx
+pushl %edx
+call print_str
+popl %edx
+
+halt
+
+
+## PRINT STRING FUNCTION ##
+print_str:
+   pushl %ebp            # save old base ptr
+   rrmovl %esp, %ebp     # set base ptr for this function
+
+   mrmovl 8(%ebp), %edx  # get string from parameter
+
+print_char:
+   mrmovl 0(%edx), %ecx  # copy current character in string into ecx
+   irmovl $0, %esi     
+   subl %esi, %ecx       # if (character is null byte) then we are done printing 
+   je done_printing      
+
+   wrch %ecx             # print the character
+
+   irmovl $4, %edi
+   addl %edi, %edx       # move up the array
+   jmp print_char
+
+done_printing:
+   irmovl $0x0a, %ebx
+   wrch %ebx	         # print a new line
+   rrmovl %ebp, %esp     # restore stack ptr
+   popl %ebp             # restore base ptr
+   ret
+
+# "Hello World!"
+hello_world_str:
+ .long 0x48 
+ .long 0x65 
+ .long 0x6c 
+ .long 0x6c 
+ .long 0x6f 
+ .long 0x20 
+ .long 0x57 
+ .long 0x6f 
+ .long 0x72 
+ .long 0x6c 
+ .long 0x64 
+ .long 0x21
+ .long 0

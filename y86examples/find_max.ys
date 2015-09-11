@@ -1,0 +1,209 @@
+## MAIN FUNCTION, ENTRY POINT ##
+main:
+   irmovl $0x1000, %esp  # init stack ptr
+  
+   # print "Keep entering positive numbers, 0 when your done"
+   irmovl str_intro_msg1, %edx
+   pushl %edx
+   call print_str
+   popl %edx
+
+   # print "We will compute the maximum"
+   irmovl str_intro_msg2, %edx
+   pushl %edx
+   call print_str
+   popl %edx
+
+   # read array data
+   irmovl $0, %eax	 # store array size in eax
+   irmovl array, %ecx
+read_val:
+   rdint %ebx            # read value
+   irmovl $0, %edi
+   addl %edi, %ebx
+   je done_reading       # if (value read in == 0) then done reading
+
+   # print the value back out (so user can see the values they've entered)
+   wrint %ebx
+   irmovl $0x20, %edi    # space
+   wrch %edi
+  
+   irmovl $1, %edi
+   addl %edi, %eax       # size++
+
+   rmmovl %ebx, 0(%ecx)  # store value in array
+   irmovl $4, %edi
+   addl %edi, %ecx       # move up array
+   jmp read_val
+done_reading:
+   # print a new line
+   irmovl $0x0a, %edi
+   wrch %edi
+
+   # compute max and print it
+   irmovl array, %ecx
+   pushl %ecx
+   pushl %eax 
+   call find_max
+   popl %ecx
+   popl %ecx
+
+   wrint %eax
+
+   halt
+
+
+
+
+## FIND MAXIMUM FUNCTION ##
+find_max:
+   pushl %ebp		 # save old base ptr
+   rrmovl %esp, %ebp     # set base ptr for this function
+
+   irmovl $0, %ebx	 # maximum seen so far
+   irmovl $0, %esi	 # number of array elements processed so far
+   mrmovl 8(%ebp), %ecx  # get array size from parameter
+   mrmovl 12(%ebp), %edx # get array data from parameter
+   
+process_val:
+   rrmovl %ecx, %edi     # copy size into edi
+   subl %esi, %edi       # if (array size - number of array elements processed so far == 0) then done 
+   je done_finding_max   
+
+   mrmovl 0(%edx), %eax  # copy current array value into eax
+   rrmovl %ebx, %edi     # copy maximum seen so far into edi
+   subl %eax, %edi       # if (max seen so far - cur val > 0) then not a new maximum value
+   jg not_new_max       
+
+   rrmovl %eax, %ebx     # otherwise we do have a new maximum value, so store it
+
+not_new_max:
+   irmovl $4, %edi
+   addl %edi, %edx       # move up the array
+
+   irmovl $1, %edi
+   addl %edi, %esi       # num array elements processed++
+   jmp process_val
+  
+done_finding_max:
+   rrmovl %ebx, %eax     # return the maximum value seen
+   rrmovl %ebp, %esp     # restore stack ptr
+   popl %ebp             # restore base ptr
+   ret
+
+
+
+## PRINT STRING FUNCTION ##
+print_str:
+   pushl %ebp
+   rrmovl %esp, %ebp
+
+   mrmovl 8(%ebp), %edx  # get string from parameter
+
+print_char:
+   mrmovl 0(%edx), %ecx  # copy current character in string into ecx
+   irmovl $0, %esi     
+   subl %esi, %ecx       # if (character is null byte) then we are done printing 
+   je done_printing      
+
+   wrch %ecx             # print the character
+
+   irmovl $4, %edi
+   addl %edi, %edx       # move up the array
+   jmp print_char
+
+done_printing:
+   irmovl $0x0a, %ebx
+   wrch %ebx	         # print a new line
+   rrmovl %ebp, %esp     
+   popl %ebp
+   ret
+
+
+# Keep entering positive numbers, 0 when your done
+str_intro_msg1:
+ .long 0x4b
+ .long 0x65
+ .long 0x65
+ .long 0x70
+ .long 0x20
+ .long 0x65
+ .long 0x6e
+ .long 0x74
+ .long 0x65
+ .long 0x72
+ .long 0x69
+ .long 0x6e
+ .long 0x67
+ .long 0x20
+ .long 0x70
+ .long 0x6f
+ .long 0x73
+ .long 0x69
+ .long 0x74
+ .long 0x69
+ .long 0x76
+ .long 0x65
+ .long 0x20
+ .long 0x6e
+ .long 0x75
+ .long 0x6d
+ .long 0x62
+ .long 0x65
+ .long 0x72
+ .long 0x73
+ .long 0x2c
+ .long 0x20
+ .long 0x30
+ .long 0x20
+ .long 0x77
+ .long 0x68
+ .long 0x65
+ .long 0x6e
+ .long 0x20
+ .long 0x79
+ .long 0x6f
+ .long 0x75
+ .long 0x72
+ .long 0x20
+ .long 0x64
+ .long 0x6f
+ .long 0x6e
+ .long 0x65
+ .long 0
+
+# We will compute the maximum
+str_intro_msg2:
+ .long 0x57
+ .long 0x65
+ .long 0x20
+ .long 0x77
+ .long 0x69
+ .long 0x6c
+ .long 0x6c
+ .long 0x20
+ .long 0x63
+ .long 0x6f
+ .long 0x6d
+ .long 0x70
+ .long 0x75
+ .long 0x74
+ .long 0x65
+ .long 0x20
+ .long 0x74
+ .long 0x68
+ .long 0x65
+ .long 0x20
+ .long 0x6d
+ .long 0x61
+ .long 0x78
+ .long 0x69
+ .long 0x6d
+ .long 0x75
+ .long 0x6d
+ .long 0
+
+
+## ARRAY DATA ##
+array:
+ .long 0

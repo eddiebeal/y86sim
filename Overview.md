@@ -28,7 +28,7 @@ We create two separate functions write_to_dbg and write_to_sim, instead of a sin
 
 Assembler
 
-The core of the assembler consists of codegen functions which perform the instruction encoding for the set of y86 instructions. We group codegen functions together based on the general format of the operands, as opposed to having a codegen function for each instruction (*). For example, rdint, rdch, wrint, wrch, pushl, and popl are grouped together in the function reg_num_codegen because they all have a single 8 bit operand representing a register number. Codegen functions have two arguments: 1) char *cmd is the name of the instruction, e.g. "pushl" 2) char **args stores the arguments to the instruction, e.g. if we have pushl %ebx, then args[0]="%ebx".
+The core of the assembler consists of codegen functions which perform the instruction encoding for the set of y86 instructions. We group codegen functions together based on the general format of the operands, as opposed to having a codegen function for each instruction (\*). For example, rdint, rdch, wrint, wrch, pushl, and popl are grouped together in the function reg_num_codegen because they all have a single 8 bit operand representing a register number. Codegen functions have two arguments: 1) char *cmd is the name of the instruction, e.g. "pushl" 2) char **args stores the arguments to the instruction, e.g. if we have pushl %ebx, then args[0]="%ebx".
 
 gen_bytecode is the function which builds the program memory. It does this by reading the source file line by line, passing each line to the parse_line function of the parser, which in turn calls the appropriate codegen function.  
 
